@@ -6,13 +6,13 @@ from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 from ml.data import process_data
-from ml.model import train_model, inference, model_slice_performance
+from ml.model import train_model, inference, compute_model_metrics, model_slice_performance
 
 # Add code to load in the data.
 data = pd.read_csv("data/census.csv")
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
-train, test = train_test_split(data, test_size=0.20)
+train, test = train_test_split(data, test_size=0.20, random_state=420)
 
 cat_features = [
     "workclass",
@@ -47,8 +47,12 @@ joblib.dump(model, "model/model.pkl")
 joblib.dump(encoder, "model/encoder.pkl")
 print("Model trained successfully, saved model and encoder in model directory.")
 
-# Compute model slice performance, save to txt
+# Compute overall model performance
 preds = inference(model, X_test)
+metrics = compute_model_metrics(y_test, preds)
+print(f"Model metrics: precision: {metrics[0]}, recall: {metrics[1]}, fbeta: {metrics[2]}")
+
+# Compute model slice performance, save to txt
 header = ["value", "precision", "recall", "fbeta"]
 with open("model/slice_output.txt", "w") as out_file:
     writer = csv.writer(out_file)
