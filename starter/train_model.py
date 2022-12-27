@@ -1,11 +1,12 @@
 # Script to train machine learning model.
+import csv
 import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 from ml.data import process_data
-from ml.model import train_model
+from ml.model import train_model, inference, model_slice_performance
 
 # Add code to load in the data.
 data = pd.read_csv("data/census.csv")
@@ -45,3 +46,17 @@ model = train_model(X_train, y_train)
 joblib.dump(model, "model/model.pkl")
 joblib.dump(encoder, "model/encoder.pkl")
 print("Model trained successfully, saved model and encoder in model directory.")
+
+# Compute model slice performance, save to txt
+preds = inference(model, X_test)
+header = ["value", "precision", "recall", "fbeta"]
+with open("model/slice_output.txt", "w") as out_file:
+    writer = csv.writer(out_file)
+    for feature in cat_features:
+        performance = model_slice_performance(feature, test, y_test, preds)
+        out_file.write(f"Feature: {feature}\n")
+        writer.writerow(header)
+        for value in performance:
+            precision, recall, fbeta = performance[value].values()
+            writer.writerow([value, precision, recall, fbeta])
+print("Saved model slice performance output to model/slice_output.txt.")

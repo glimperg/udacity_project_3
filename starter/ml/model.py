@@ -50,7 +50,7 @@ def inference(model, X):
 
     Inputs
     ------
-    model : ???
+    model : RandomForestClassifier
         Trained machine learning model.
     X : np.array
         Data used for prediction.
@@ -61,3 +61,30 @@ def inference(model, X):
     """
     preds = model.predict(X)
     return preds
+
+
+def model_slice_performance(feature, test_set, y_test, preds):
+    """
+    Compute performance metrics on the model slice defined by the input feature.
+
+    Inputs
+    ------
+    feature: str
+        Name of the feature to be held fixed.
+    test_set: df
+        Unprocessed test dataset.
+    y_test: np.array
+        Processed test labels.
+    preds: np.array
+        Output test predictions.
+    Returns
+    -------
+    performance: dict
+        Dictionary containing performance metrics for each value of the feature.
+    """
+    performance = {}
+    for value in test_set[feature].unique():
+        mask_value = test_set[feature] == value
+        precision, recall, fbeta = compute_model_metrics(y_test[mask_value], preds[mask_value])
+        performance[value] = {"precision": precision, "recall": recall, "fbeta": fbeta}
+    return performance
