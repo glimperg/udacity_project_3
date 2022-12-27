@@ -13,7 +13,7 @@ The prediction is binary: either less than (or equal to) $50k, or more than $50k
 The model is trained on the [Census Income Dataset](https://archive.ics.uci.edu/ml/datasets/census+income). 
 The dataset consists of 32561 rows of data corresponding to various attributes of different people.
 The data has been cleaned by removing all spaces in the csv file. The data was split into a train and test set using an 80-20 split.
-Before training, a one hot encoder was applied to the features, as well as a label binarizer on the labels.
+Before training, a one hot encoder was applied to the categorical features, as well as a label binarizer on the labels.
 
 ## Metrics
 The metrics used to evaluate the model are precision, recall and F1 score.

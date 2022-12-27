@@ -2,6 +2,18 @@ from sklearn.metrics import fbeta_score, precision_score, recall_score
 from sklearn.ensemble import RandomForestClassifier
 
 
+CAT_FEATURES = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
+
+
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """

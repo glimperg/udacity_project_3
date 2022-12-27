@@ -1,3 +1,6 @@
+"""
+Unit tests for starter/ml/model.py.
+"""
 import pytest
 import numpy as np
 import pandas as pd

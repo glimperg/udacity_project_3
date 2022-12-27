@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 # Add the necessary imports for the starter code.
 from ml.data import process_data
-from ml.model import train_model, inference, compute_model_metrics, model_slice_performance
+from ml.model import CAT_FEATURES, train_model, inference, compute_model_metrics, model_slice_performance
 
 # Add code to load in the data.
 data = pd.read_csv("data/census.csv")
@@ -14,19 +14,9 @@ data = pd.read_csv("data/census.csv")
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
 train, test = train_test_split(data, test_size=0.20, random_state=420)
 
-cat_features = [
-    "workclass",
-    "education",
-    "marital-status",
-    "occupation",
-    "relationship",
-    "race",
-    "sex",
-    "native-country",
-]
 X_train, y_train, encoder, lb = process_data(
     train,
-    categorical_features=cat_features,
+    categorical_features=CAT_FEATURES,
     label="salary",
     training=True
 )
@@ -34,7 +24,7 @@ X_train, y_train, encoder, lb = process_data(
 # Process the test data with the process_data function.
 X_test, y_test, encoder, lb = process_data(
     test,
-    categorical_features=cat_features,
+    categorical_features=CAT_FEATURES,
     label="salary",
     training=False,
     encoder=encoder,
@@ -56,7 +46,7 @@ print(f"Model metrics: precision: {metrics[0]}, recall: {metrics[1]}, fbeta: {me
 header = ["value", "precision", "recall", "fbeta"]
 with open("model/slice_output.txt", "w") as out_file:
     writer = csv.writer(out_file)
-    for feature in cat_features:
+    for feature in CAT_FEATURES:
         performance = model_slice_performance(feature, test, y_test, preds)
         out_file.write(f"Feature: {feature}\n")
         writer.writerow(header)
